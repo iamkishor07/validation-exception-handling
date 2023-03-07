@@ -28,7 +28,8 @@
                "nationality": "Indian"
            }
     
-    so, here we use validation on the userdto class to validate the data before we push into the DB,
+    
+  #so, here we use validation on the userdto class to validate the data before we push into the DB,
     we use the following annotations to validate the data and to put respective messages when its get triggerd the
     following message displays as a result the user knows what mistake he done while giving the data
     
@@ -49,7 +50,16 @@
     @Email: to say that a string field must be a valid email address.
     
     
-    
+  #@Validated and @Valid
+    In many cases, however, Spring does the validation for us. We don’t even need to create a validator object ourselves.
+    Instead, we can let Spring know that we want to have a certain object validated. 
+    This works by using the the @Validated and @Valid annotations.
+
+    The @Validated annotation is a class-level annotation that we can use to tell Spring to validate parameters that are 
+    passed into a method of the annotated class. We’ll learn more about how to use it in the section about
+    validating path variables and request parameters.
+
+   We can put the @Valid annotation on method parameters and fields to tell Spring that we want a method parameter or field to be validated
     
     
     #An example of such a class would look like this:
@@ -115,6 +125,55 @@
           default message [Invalid mobile number entered]] ]
 
 
- #as we see we get all the exception and those exceptions are
- 
-   1.MethodArgumentNotValidException
+ #as we see we get all the exception and those exceptions are MethodArgumentNotValidException
+   
+   
+   ## We therefore use the execptions mechanism to handle the exceptions
+   
+   Then we create an package of exception in handle the MethodArgumentNotValidException exception, for that we need to create a class as below
+   
+         @RestControllerAdvice
+      public class CustomExceptionHandler {
+
+          @ResponseStatus(HttpStatus.BAD_REQUEST)
+          @ExceptionHandler(MethodArgumentNotValidException.class)
+           public Map<String,String>handleInvalidException(MethodArgumentNotValidException ex){
+
+              Map<String,String> errormap=new HashMap<>();
+              ex.getBindingResult().getFieldErrors().forEach(error->{
+                  errormap.put(error.getField(),error.getDefaultMessage());
+              });
+              return errormap;
+          }
+      }
+      
+      
+    #The above class that handles the MethodArgumentNotValidException by using the @ExceptionHandler to map the exception to methods and that 
+    triggers when particular exception raises and executes the below code.
+    
+    # In the handleInvalidException method we fetch all the exception that occur from runtime from ex and 
+    extract all the field errors(key ,value as pair) like field name and the default message and map into a hashmap and we return to the controller
+    that displays those message at the user end.
+    
+    
+   #for the below data when we try to pass
+   
+          {
+               "name": "",
+               "email": "@gmail.com",
+               "mobile": "666",
+               "gender": "male",
+               "age": 292,
+               "nationality": ""
+           }
+  #AS we see in the above fields the data is not valid so we get the following message after handling execptions
+  
+        {
+          "nationality": "must not be blank",
+          "mobile": "Invalid mobile number entered",
+          "age": "must be less than or equal to 90",
+          "email": "Invalid email address"
+      }
+   
+   
+   So, we can handle any execption by mapping it to the specified method int the exception package and class that is annoated with @RestControllerAdvice
