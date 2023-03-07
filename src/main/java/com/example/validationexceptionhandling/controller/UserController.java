@@ -3,6 +3,7 @@ package com.example.validationexceptionhandling.controller;
 import com.example.validationexceptionhandling.Entity.User;
 import com.example.validationexceptionhandling.dto.Userdto;
 import com.example.validationexceptionhandling.service.UserServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class UserController {
     private  UserServiceImpl userServiceImpl;
 
     @PostMapping("/signup")
-    public  ResponseEntity<User> Saveuser(@RequestBody  Userdto userdto){
+    public  ResponseEntity<User> Saveuser(@RequestBody  @Valid Userdto userdto){
            return new ResponseEntity<>(userServiceImpl.save(userdto), HttpStatus.CREATED);
 
     }
