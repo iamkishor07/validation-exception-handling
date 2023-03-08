@@ -1,0 +1,30 @@
+# What are the best practices to handle exception at Controller, Service and DAO Layer simultaneously in Spring & Hibernate
+
+    You should not handle exception at DAO layer. Reason: Normally we place @Transactional annotation at Service Layer. 
+    hence we need to rollback transaction at service layer. If you handle exception at DAO then it will not rollback.
+    Follow below link to know why we should place @Transaction at Service Layer.
+
+  Where should "@Transactional" be placed Service Layer or DAO You should not handle exception at Service Layer. 
+  Reason: As service layer execute multiple DAO for DB operation and we need to rollback transaction if any DAO fails. 
+  If we handle exception in service then we may not rollback transaction. There is manual approach for rollback transaction but it is not recommend.
+  TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
+#So handle exception in controller layer.
+
+  you don't handle exceptions at all levels of your application simultaneously; you have to consider their contextual meaning and
+  what the appropriate strategy is for your application. Some errors should be ignored, some should be wrapped, some should be allowed to be raised directly.
+
+  One method for dealing with exceptions in a spring-mvc application is to wrap fatal errors from the underlying libraries with your own where appropriate, 
+  named for the level at which they are thrown, e.g. ServiceException or RepositoryException. A @ControllerAdvice-annotated class can then handle
+  these errors with @ErrorHandler-annotated methods and return 5XX http errors.
+
+  Common application errors, like an entity not being found due to an incorrect id can result in a custom exception, 
+  e.g. NotFoundException being raised and subsequently caught in your @ControllerAdvice-annotated class.
+
+  The advantage to this technique is that you have less error-handling code in your different application layers and can 
+  centralize the conversion of exceptions to responses.
+
+    You should make your services transactional and handle the exceptions in the Controller layer: you may choose Controller 
+    Based Exception Handling (Using @ExceptionHandler) or Global Exception Handling (Using @ControllerAdvice Classes). 
+    It may be practical to display something, e.g. an error page to users in case of exceptions.
+    
