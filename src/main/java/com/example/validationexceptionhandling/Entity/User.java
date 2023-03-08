@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.GenerationType.SEQUENCE;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "build")
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "Users_Data")
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=SEQUENCE, generator="CUST_SEQ")
     private  int userId;
     @Column(name = "username") private  String  name;
     @Column(name = "email") private  String email;
