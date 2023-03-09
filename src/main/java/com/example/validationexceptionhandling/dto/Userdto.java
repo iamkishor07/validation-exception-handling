@@ -16,8 +16,8 @@ public class Userdto {
     @NotNull
     @Pattern(regexp = "^\\d{10}$",message = "Invalid mobile number entered") private  String mobile;
     private  String gender;
-    @Min(16)
-    @Max(90)
+    @Min(value = 10,message = "Age should be greater than 10")
+    @Max(value = 90,message = "age should be less than or equal to 90")
     private  int age;
     @NotBlank
     private  String nationality;
