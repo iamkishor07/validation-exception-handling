@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class Userdto {
     @NotNull(message = "UserName shouldn't be Null or Empty")
     private  String  name;
+
     @Email(message = "Invalid email address")
     private  String email;
     @NotNull
