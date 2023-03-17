@@ -14,7 +14,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Table(name = "Users_Data")
 public class User {
     @Id
-    @GeneratedValue(strategy=SEQUENCE, generator="CUST_SEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private  int userId;
     @Column(name = "username") private  String  name;
     @Column(name = "email") private  String email;
